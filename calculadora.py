@@ -120,14 +120,15 @@ MDBoxLayout:
                 on_release: app.inserir_texto(self)
 '''
 
-texto = []
+texto = [] #lista quer será utilizada para manipulação das strings enviadas pelos botões
 class MainApp(MDApp):
     def build(self):
         Window.size = (350, 500)
-        return Builder.load_string(kv)
+        return Builder.load_string(kv) 
 
     def inserir_texto(self,texto_botao):
-       
+        #aqui receberei o valor do botão como argumento, adicionarei a lista e tratarei a lista usando o join para que forme um texte que
+        #será adicionado a um MDLabel dentro de um MDCard
         texto.append(texto_botao.text)
         self.root.ids.texto_calculadora.text = ''.join(texto)
            
@@ -135,10 +136,12 @@ class MainApp(MDApp):
 
 
     def apagar(self):
-        if len(texto) > 1:
+        #Para apagar algum valor
+        if len(texto) > 1: #verifiquei se ele é maior que um para que apague apenas o ultimo valor por vez
             texto.pop(len(texto)-1)
-            self.root.ids.texto_calculadora.text = ''.join(texto)
+            self.root.ids.texto_calculadora.text = ''.join(texto) # e após ser apagado o ultimo item na lista será adicionado uma nova string contendo os valores restante 
         else:
+            #caso seja igual a 1 ou 0 apenas irei substituir o texto e limpar a lista
             texto.clear()
             self.root.ids.texto_calculadora.text = ''
 
@@ -156,14 +159,18 @@ class MainApp(MDApp):
         
     def divisao(self,n1,n2):
         return n1/n2  
+        
     def novo_numero(self,resultado):
+        #Nesta função estarei recebendo o resultado da operação, limpando a lista, adicionado o novo item e adicionando o novo texto
         texto.clear()
         texto.append(str(int(resultado)))
         self.root.ids.texto_calculadora.text = ''.join(texto)
     def identificador(self):
+        #Nesta função irei vericiar através de tratamento de string qual a operação está sendo feita e fazendo-a
+        #todos as variaveis de resultado recebem os valores que ficam antes e depois do sinal de operação
         dentro_do_card =  self.root.ids.texto_calculadora.text
         if '+' in dentro_do_card:
-            resultado_soma = self.soma(int(''.join(texto[0:texto.index('+')])),int(''.join(texto[texto.index('+'):])))
+            resultado_soma = self.soma(int(''.join(texto[0:texto.index('+')])),int(''.join(texto[texto.index('+'):]))) 
             self.novo_numero(resultado_soma)
         if '-' in dentro_do_card:
             resultado_subtracao = self.subtracao(int(''.join(texto[0:texto.index('-')])),int(''.join(texto[texto.index('-')+1:])))
